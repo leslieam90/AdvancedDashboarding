@@ -1,0 +1,67 @@
+---
+title: "Advanced Dashboarding"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    #fill will resize all the panels to fit on one visible screen, if you have a lot of panels and they would get too small you can change the layout to scroll
+    social: ["menu"]
+    source_code: embed #you can also tell it to go to a gitHub
+    
+    
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(palmerpenguins)
+library(plotly)
+library(DT)
+library(fontawesome)
+data("penguins") #you will notice it says promise
+#start typing the word penguins and the data populates - weird! 
+```
+
+Plots
+========================================================================
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Scatterplot of Bill Length vs Bill Depth by Species 
+
+```{r}
+a = penguins %>% ggplot(aes(x = bill_length_mm, y = bill_depth_mm, color = species)) + geom_point()
+ggplotly(a)
+
+#htmpwidgets.org to find some of these widgets and how to do them 
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+penguins %>% ggplot(aes(x = body_mass_g, y = sex, fill= sex)) +
+  geom_boxplot()
+```
+
+### Chart C
+
+```{r}
+penguins %>%  ggplot(aes(x = flipper_length_mm, fill = species)) +
+  geom_histogram() +
+  facet_wrap(~species)
+```
+
+Data
+===============================================
+
+```{r}
+penguins %>% datatable(extensions = "Buttons",
+                       options = list(dom= "Blfrtip", #B is for Buttons, and the gibberish letters are for all the different things on the page 
+                                      buttons = c("copy", "csv", "pdf", "print"))) 
+#datatable.net has lots of other things you can do with the data table package 
+```
+
